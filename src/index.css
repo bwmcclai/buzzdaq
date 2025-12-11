@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+body {
+  background-color: #000;
+  color: #22c55e;
+  font-family: 'Courier New', monospace;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Terminal aesthetic styles */
+.terminal-text {
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 3px currentColor;
+}
+
+.terminal-border {
+  border: 1px solid currentColor;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0f0;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0c0;
+}
+
+/* Animation for ticker tape */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll-left 30s linear infinite;
+}
