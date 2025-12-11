@@ -246,13 +246,23 @@ export default function MarketDashboard() {
             >
               <TrendingUp className="w-6 h-6 text-white" />
             </motion.div>
-            <motion.p 
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="font-bold text-2xl gradient-text-primary"
-            >
-              BUZZDAQ
-            </motion.p>
+            <div className="flex flex-col">
+              <motion.p 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="font-bold text-2xl gradient-text-primary"
+              >
+                BUZZDAQ
+              </motion.p>
+              <motion.p
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-xs text-default-400 font-medium italic"
+              >
+                Buy the Hype. Sell the Truth.
+              </motion.p>
+            </div>
           </NavbarBrand>
         </NavbarContent>
 
@@ -427,10 +437,11 @@ export default function MarketDashboard() {
           </NavbarItem>
 
           {/* Mobile Menu Toggle */}
-          <NavbarMenuToggle
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            className="lg:hidden"
-          />
+          <NavbarItem className="lg:hidden">
+            <NavbarMenuToggle
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            />
+          </NavbarItem>
         </NavbarContent>
 
         {/* Mobile Menu */}
