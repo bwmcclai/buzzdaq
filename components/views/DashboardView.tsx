@@ -53,12 +53,15 @@ export default function DashboardView({ stocks }: DashboardViewProps) {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
         >
           <motion.div variants={itemVariants}>
-            <Card className="glass-card border-white/10 hover-lift group">
+            <Card className="glass-card border-white/10 hover-lift group h-full">
               <CardBody className="py-6 px-5">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between h-full">
                   <div className="flex-1">
-                    <p className="text-xs text-default-400 mb-1 font-medium">S&P 500</p>
-                    <p className="text-3xl font-bold mb-2">5,099.23</p>
+                    <Chip size="sm" color="danger" variant="flat" className="mb-2 font-semibold">
+                      Biggest Loser
+                    </Chip>
+                    <p className="text-sm text-default-400 mb-1 font-medium">#BIDEN</p>
+                    <p className="text-3xl font-bold mb-2">$5,099.23</p>
                     <div className="flex items-center gap-1">
                       <ArrowDownRight className="w-4 h-4 text-danger" />
                       <span className="text-sm text-danger font-semibold">-0.40%</span>
@@ -77,12 +80,15 @@ export default function DashboardView({ stocks }: DashboardViewProps) {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <Card className="glass-card border-white/10 hover-lift group">
+            <Card className="glass-card border-white/10 hover-lift group h-full">
               <CardBody className="py-6 px-5">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between h-full">
                   <div className="flex-1">
-                    <p className="text-xs text-default-400 mb-1 font-medium">NASDAQ</p>
-                    <p className="text-3xl font-bold mb-2">16,274.94</p>
+                    <Chip size="sm" color="success" variant="flat" className="mb-2 font-semibold">
+                      Biggest Gainer
+                    </Chip>
+                    <p className="text-sm text-default-400 mb-1 font-medium">$VENEZUELA</p>
+                    <p className="text-3xl font-bold mb-2">$16,274.94</p>
                     <div className="flex items-center gap-1">
                       <ArrowUpRight className="w-4 h-4 text-success" />
                       <span className="text-sm text-success font-semibold">+0.56%</span>
@@ -101,11 +107,12 @@ export default function DashboardView({ stocks }: DashboardViewProps) {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <Card className="glass-card border-white/10 hover-lift group">
+            <Card className="glass-card border-white/10 hover-lift group h-full">
               <CardBody className="py-6 px-5">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between h-full">
                   <div className="flex-1">
-                    <p className="text-xs text-default-400 mb-1 font-medium">Buzzword Index</p>
+                    <div className="h-6 mb-2"></div>
+                    <p className="text-sm text-default-400 mb-1 font-medium">Buzzword Index</p>
                     <p className="text-3xl font-bold mb-2">1,245.35</p>
                     <div className="flex items-center gap-1">
                       <ArrowUpRight className="w-4 h-4 text-success" />
@@ -124,11 +131,12 @@ export default function DashboardView({ stocks }: DashboardViewProps) {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <Card className="glass-card border-white/10 hover-lift group">
+            <Card className="glass-card border-white/10 hover-lift group h-full">
               <CardBody className="py-6 px-5">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between h-full">
                   <div className="flex-1">
-                    <p className="text-xs text-default-400 mb-1 font-medium">Active Traders</p>
+                    <div className="h-6 mb-2"></div>
+                    <p className="text-sm text-default-400 mb-1 font-medium">Active Traders</p>
                     <p className="text-3xl font-bold mb-2">2,845</p>
                     <div className="flex items-center gap-1">
                       <ArrowUpRight className="w-4 h-4 text-primary" />
@@ -165,7 +173,18 @@ export default function DashboardView({ stocks }: DashboardViewProps) {
                     <Zap className="w-5 h-5 text-primary" />
                     <h3 className="text-xl font-bold gradient-text-primary">Buzzword Stocks</h3>
                   </div>
-                  <Tabs size="sm" aria-label="Movers tabs" color="primary" variant="bordered">
+                  <Tabs 
+                    size="sm" 
+                    aria-label="Movers tabs" 
+                    color="primary" 
+                    variant="solid"
+                    classNames={{
+                      tabList: "bg-white/5 backdrop-blur-sm border border-white/10 p-1 rounded-lg",
+                      cursor: "bg-gradient-to-r from-primary to-purple-500 shadow-lg shadow-primary/20",
+                      tab: "px-4 py-2 font-semibold data-[hover-unselected=true]:opacity-80 transition-all",
+                      tabContent: "group-data-[selected=true]:text-white"
+                    }}
+                  >
                     <Tab key="all" title="All" />
                     <Tab key="gainers" title="Gainers" />
                     <Tab key="losers" title="Losers" />
@@ -221,15 +240,22 @@ export default function DashboardView({ stocks }: DashboardViewProps) {
                     ))}
                 </div>
               </CardBody>
-              <CardFooter className="px-6 pt-3">
-                <motion.div className="w-full" whileHover={{ scale: 1.02 }}>
+              <CardFooter className="px-6 pt-3 pb-5">
+                <motion.div className="w-full" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button 
                     color="primary" 
-                    variant="flat" 
-                    className="w-full font-semibold"
-                    endContent={<ArrowUpRight className="w-4 h-4" />}
+                    variant="shadow"
+                    size="lg"
+                    className="w-full font-semibold bg-gradient-to-r from-primary to-purple-500 hover:opacity-90 transition-opacity rounded-2xl flex items-center justify-center gap-2"
                   >
-                    View All Stocks
+                    <span>View All Stocks</span>
+                    <motion.div 
+                      whileHover={{ rotate: -45 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0"
+                    >
+                      <ArrowUpRight className="w-4 h-4" />
+                    </motion.div>
                   </Button>
                 </motion.div>
               </CardFooter>
@@ -277,15 +303,22 @@ export default function DashboardView({ stocks }: DashboardViewProps) {
                   ))}
                 </div>
               </CardBody>
-              <CardFooter className="px-6 pt-3">
-                <motion.div className="w-full" whileHover={{ scale: 1.02 }}>
+              <CardFooter className="px-6 pt-3 pb-5">
+                <motion.div className="w-full" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button 
                     color="primary" 
-                    variant="flat" 
-                    className="w-full font-semibold"
-                    endContent={<ArrowUpRight className="w-4 h-4" />}
+                    variant="shadow"
+                    size="lg"
+                    className="w-full font-semibold bg-gradient-to-r from-primary to-purple-500 hover:opacity-90 transition-opacity rounded-2xl flex items-center justify-center gap-2"
                   >
-                    View All News
+                    <span>View All News</span>
+                    <motion.div 
+                      whileHover={{ rotate: -45 }}
+                      transition={{ duration: 0.3 }}
+                      className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0"
+                    >
+                      <ArrowUpRight className="w-4 h-4" />
+                    </motion.div>
                   </Button>
                 </motion.div>
               </CardFooter>

@@ -273,7 +273,7 @@ export default function MarketDashboard() {
                     color={isActive ? "primary" : "default"}
                     startContent={<Icon className="w-4 h-4" />}
                     onPress={() => setActiveView(item.id)}
-                    className={`${isActive ? "glow-primary" : "text-default-500 hover:text-foreground"} transition-all`}
+                    className={`${isActive ? "glow-primary rounded-xl" : "text-default-500 hover:text-foreground rounded-xl"} transition-all`}
                   >
                     {item.label}
                   </Button>
@@ -284,18 +284,18 @@ export default function MarketDashboard() {
         </NavbarContent>
 
         {/* Right Side - Portfolio & User */}
-        <NavbarContent justify="end">
+        <NavbarContent justify="end" className="gap-3">
           {/* Portfolio Value Chip */}
           <NavbarItem className="hidden md:flex">
             <motion.div 
               initial={{ opacity: 0, x: 10 }}
               animate={{ opacity: 1, x: 0 }}
               whileHover={{ scale: 1.05 }}
-              className="flex items-center gap-3 px-4 py-2 glass-card rounded-xl"
+              className="flex items-center gap-3 px-5 py-2 my-2 glass-card rounded-xl border border-white/10"
             >
               <div className="text-right">
-                <p className="text-xs text-default-400">Portfolio</p>
-                <p className="text-sm font-bold">${portfolioValue.toFixed(2)}</p>
+                <p className="text-xs text-default-400 font-medium">Portfolio</p>
+                <p className="text-base font-bold">${portfolioValue.toFixed(2)}</p>
               </div>
               <Chip
                 color={portfolioChange >= 0 ? "success" : "danger"}
@@ -310,13 +310,70 @@ export default function MarketDashboard() {
 
           {/* Notifications */}
           <NavbarItem>
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Button isIconOnly variant="light" aria-label="Notifications" className="relative">
-                <Badge content="3" color="danger" size="sm" className="animate-pulse">
-                  <Bell className="w-5 h-5" />
-                </Badge>
-              </Button>
-            </motion.div>
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                  <Button 
+                    isIconOnly 
+                    variant="light" 
+                    aria-label="Notifications" 
+                    className="relative hover:bg-white/5"
+                  >
+                    <Badge content="3" color="danger" size="sm" className="animate-pulse">
+                      <Bell className="w-5 h-5" />
+                    </Badge>
+                  </Button>
+                </motion.div>
+              </DropdownTrigger>
+              <DropdownMenu 
+                aria-label="Notifications" 
+                variant="flat" 
+                className="glass-card p-0 w-80"
+                classNames={{
+                  list: "p-0 gap-0"
+                }}
+              >
+                <DropdownItem key="header" className="cursor-default hover:bg-transparent" textValue="Notifications">
+                  <div className="px-4 py-3 border-b border-white/10">
+                    <h3 className="font-bold text-base">Notifications</h3>
+                    <p className="text-xs text-default-400">You have 3 unread messages</p>
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="notif1" textValue="AI stock surge" className="data-[hover=true]:bg-white/5 py-3 px-4">
+                  <div className="flex gap-3">
+                    <div className="w-2 h-2 bg-primary rounded-full mt-1.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-semibold text-sm">$AI surged 15%!</p>
+                      <p className="text-xs text-default-400">Your stock is performing well</p>
+                      <p className="text-xs text-default-500 mt-1">2 minutes ago</p>
+                    </div>
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="notif2" textValue="Market alert" className="data-[hover=true]:bg-white/5 py-3 px-4">
+                  <div className="flex gap-3">
+                    <div className="w-2 h-2 bg-success rounded-full mt-1.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-semibold text-sm">Market Alert</p>
+                      <p className="text-xs text-default-400">Tech sector showing strong momentum</p>
+                      <p className="text-xs text-default-500 mt-1">1 hour ago</p>
+                    </div>
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="notif3" textValue="Portfolio update" className="data-[hover=true]:bg-white/5 py-3 px-4">
+                  <div className="flex gap-3">
+                    <div className="w-2 h-2 bg-warning rounded-full mt-1.5 flex-shrink-0" />
+                    <div>
+                      <p className="font-semibold text-sm">Portfolio Update</p>
+                      <p className="text-xs text-default-400">Daily summary is ready to view</p>
+                      <p className="text-xs text-default-500 mt-1">3 hours ago</p>
+                    </div>
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="view-all" textValue="View all" className="data-[hover=true]:bg-primary/10 border-t border-white/10 py-3">
+                  <p className="text-center text-sm font-semibold text-primary">View All Notifications</p>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </NavbarItem>
 
           {/* User Menu */}
@@ -327,7 +384,7 @@ export default function MarketDashboard() {
                   <Avatar
                     isBordered
                     as="button"
-                    className="transition-transform"
+                    className="transition-transform cursor-pointer"
                     color="primary"
                     name="User"
                     size="sm"
@@ -335,14 +392,34 @@ export default function MarketDashboard() {
                   />
                 </motion.div>
               </DropdownTrigger>
-              <DropdownMenu aria-label="User Actions" variant="flat" className="glass-card">
-                <DropdownItem key="profile" startContent={<UserIcon className="w-4 h-4" />}>
+              <DropdownMenu 
+                aria-label="User Actions" 
+                variant="flat" 
+                className="glass-card p-2 min-w-[200px]"
+                itemClasses={{
+                  base: "rounded-lg data-[hover=true]:bg-white/10 data-[hover=true]:text-foreground py-3 px-3 gap-3 transition-all",
+                }}
+              >
+                <DropdownItem 
+                  key="profile" 
+                  startContent={<UserIcon className="w-4 h-4" />}
+                  className="font-medium"
+                >
                   Profile
                 </DropdownItem>
-                <DropdownItem key="settings" startContent={<Settings className="w-4 h-4" />}>
+                <DropdownItem 
+                  key="settings" 
+                  startContent={<Settings className="w-4 h-4" />}
+                  className="font-medium"
+                >
                   Settings
                 </DropdownItem>
-                <DropdownItem key="logout" color="danger" startContent={<LogOut className="w-4 h-4" />}>
+                <DropdownItem 
+                  key="logout" 
+                  color="danger" 
+                  startContent={<LogOut className="w-4 h-4" />}
+                  className="font-medium data-[hover=true]:bg-danger/20"
+                >
                   Log Out
                 </DropdownItem>
               </DropdownMenu>
