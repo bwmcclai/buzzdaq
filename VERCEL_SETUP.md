@@ -75,9 +75,13 @@ To enable automatic market updates:
 1. In Vercel dashboard, go to **Settings** → **Cron Jobs**
 2. Add a new cron job:
    - Path: `/api/cron/update-market`
-   - Schedule: `*/5 * * * *` (every 5 minutes)
+   - Schedule: `0 12 * * *` (once daily at 12:00 PM UTC)
 
-This will automatically update stock prices based on buzzword trends.
+**Note:** Vercel's Hobby tier limits cron jobs to once per day. This will update stock prices daily based on buzzword trends from the past 24 hours.
+
+If you upgrade to Pro tier, you can increase the frequency:
+- Every hour: `0 * * * *`
+- Every 5 minutes: `*/5 * * * *`
 
 ## Important Notes
 
