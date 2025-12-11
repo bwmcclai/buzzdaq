@@ -1,7 +1,8 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { Card, CardHeader, CardBody, CardFooter, Chip, Button, Tabs, Tab } from '@heroui/react';
-import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, Flame, Zap, Activity } from 'lucide-react';
 
 interface Stock {
   symbol: string;
@@ -16,6 +17,21 @@ interface DashboardViewProps {
   stocks: Stock[];
 }
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 }
+};
+
 export default function DashboardView({ stocks }: DashboardViewProps) {
   // Mock news data
   const news = [
@@ -26,215 +42,309 @@ export default function DashboardView({ stocks }: DashboardViewProps) {
   ];
 
   return (
-    <div className="h-full overflow-y-auto bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-blue-950/20 dark:to-purple-950/10 custom-scrollbar">
-      <div className="max-w-[1600px] mx-auto p-6 space-y-6 animate-fade-in">
+    <div className="h-full overflow-y-auto custom-scrollbar">
+      <div className="max-w-[1600px] mx-auto p-6 space-y-6">
         
         {/* Market Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardBody className="py-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-default-500">S&P 500</p>
-                  <p className="text-2xl font-bold mt-1">5,099.23</p>
-                  <div className="flex items-center gap-1 mt-2">
-                    <ArrowDownRight className="w-4 h-4 text-danger" />
-                    <span className="text-sm text-danger font-medium">-0.40%</span>
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"
+        >
+          <motion.div variants={itemVariants}>
+            <Card className="glass-card border-white/10 hover-lift group">
+              <CardBody className="py-6 px-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <p className="text-xs text-default-400 mb-1 font-medium">S&P 500</p>
+                    <p className="text-3xl font-bold mb-2">5,099.23</p>
+                    <div className="flex items-center gap-1">
+                      <ArrowDownRight className="w-4 h-4 text-danger" />
+                      <span className="text-sm text-danger font-semibold">-0.40%</span>
+                    </div>
                   </div>
+                  <motion.div 
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.6 }}
+                    className="w-14 h-14 bg-gradient-danger rounded-2xl flex items-center justify-center shadow-lg shadow-danger/20"
+                  >
+                    <TrendingDown className="w-7 h-7 text-white" />
+                  </motion.div>
                 </div>
-                <div className="w-12 h-12 bg-danger/10 rounded-full flex items-center justify-center">
-                  <TrendingDown className="w-6 h-6 text-danger" />
-                </div>
-              </div>
-            </CardBody>
-          </Card>
+              </CardBody>
+            </Card>
+          </motion.div>
 
-          <Card>
-            <CardBody className="py-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-default-500">NASDAQ</p>
-                  <p className="text-2xl font-bold mt-1">16,274.94</p>
-                  <div className="flex items-center gap-1 mt-2">
-                    <ArrowUpRight className="w-4 h-4 text-success" />
-                    <span className="text-sm text-success font-medium">+0.56%</span>
+          <motion.div variants={itemVariants}>
+            <Card className="glass-card border-white/10 hover-lift group">
+              <CardBody className="py-6 px-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <p className="text-xs text-default-400 mb-1 font-medium">NASDAQ</p>
+                    <p className="text-3xl font-bold mb-2">16,274.94</p>
+                    <div className="flex items-center gap-1">
+                      <ArrowUpRight className="w-4 h-4 text-success" />
+                      <span className="text-sm text-success font-semibold">+0.56%</span>
+                    </div>
                   </div>
+                  <motion.div 
+                    whileHover={{ rotate: -360 }}
+                    transition={{ duration: 0.6 }}
+                    className="w-14 h-14 bg-gradient-success rounded-2xl flex items-center justify-center shadow-lg shadow-success/20"
+                  >
+                    <TrendingUp className="w-7 h-7 text-white" />
+                  </motion.div>
                 </div>
-                <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-success" />
-                </div>
-              </div>
-            </CardBody>
-          </Card>
+              </CardBody>
+            </Card>
+          </motion.div>
 
-          <Card>
-            <CardBody className="py-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-default-500">Buzzword Index</p>
-                  <p className="text-2xl font-bold mt-1">1,245.35</p>
-                  <div className="flex items-center gap-1 mt-2">
-                    <ArrowUpRight className="w-4 h-4 text-success" />
-                    <span className="text-sm text-success font-medium">+1.23%</span>
+          <motion.div variants={itemVariants}>
+            <Card className="glass-card border-white/10 hover-lift group">
+              <CardBody className="py-6 px-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <p className="text-xs text-default-400 mb-1 font-medium">Buzzword Index</p>
+                    <p className="text-3xl font-bold mb-2">1,245.35</p>
+                    <div className="flex items-center gap-1">
+                      <ArrowUpRight className="w-4 h-4 text-success" />
+                      <span className="text-sm text-success font-semibold">+1.23%</span>
+                    </div>
                   </div>
+                  <motion.div 
+                    whileHover={{ scale: 1.1 }}
+                    className="w-14 h-14 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20"
+                  >
+                    <Flame className="w-7 h-7 text-white" />
+                  </motion.div>
                 </div>
-                <div className="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-success" />
-                </div>
-              </div>
-            </CardBody>
-          </Card>
+              </CardBody>
+            </Card>
+          </motion.div>
 
-          <Card>
-            <CardBody className="py-5">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-default-500">Active Traders</p>
-                  <p className="text-2xl font-bold mt-1">2,845</p>
-                  <div className="flex items-center gap-1 mt-2">
-                    <ArrowUpRight className="w-4 h-4 text-success" />
-                    <span className="text-sm text-success font-medium">+12%</span>
+          <motion.div variants={itemVariants}>
+            <Card className="glass-card border-white/10 hover-lift group">
+              <CardBody className="py-6 px-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <p className="text-xs text-default-400 mb-1 font-medium">Active Traders</p>
+                    <p className="text-3xl font-bold mb-2">2,845</p>
+                    <div className="flex items-center gap-1">
+                      <ArrowUpRight className="w-4 h-4 text-primary" />
+                      <span className="text-sm text-primary font-semibold">+12%</span>
+                    </div>
                   </div>
+                  <motion.div 
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="w-14 h-14 bg-gradient-primary rounded-2xl flex items-center justify-center shadow-lg shadow-primary/20"
+                  >
+                    <Activity className="w-7 h-7 text-white" />
+                  </motion.div>
                 </div>
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-primary" />
-                </div>
-              </div>
-            </CardBody>
-          </Card>
-        </div>
+              </CardBody>
+            </Card>
+          </motion.div>
+        </motion.div>
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
           {/* Top Movers */}
-          <Card className="lg:col-span-2">
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-center w-full">
-                <h3 className="text-lg font-semibold">Buzzword Stocks</h3>
-                <Tabs size="sm" aria-label="Movers tabs" color="primary">
-                  <Tab key="all" title="All" />
-                  <Tab key="gainers" title="Gainers" />
-                  <Tab key="losers" title="Losers" />
-                </Tabs>
-              </div>
-            </CardHeader>
-            <CardBody className="px-4">
-              <div className="space-y-3">
-                {stocks
-                  .sort((a, b) => b.changePercent - a.changePercent)
-                  .map((stock) => (
-                    <div
-                      key={stock.symbol}
-                      className="flex items-center justify-between p-3 rounded-lg bg-default-100 hover:bg-default-200 transition-colors cursor-pointer"
-                    >
-                      <div className="flex items-center gap-3 flex-1">
-                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                          stock.change >= 0 ? 'bg-success/10' : 'bg-danger/10'
-                        }`}>
-                          {stock.change >= 0 ? (
-                            <TrendingUp className="w-5 h-5 text-success" />
-                          ) : (
-                            <TrendingDown className="w-5 h-5 text-danger" />
-                          )}
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+            className="lg:col-span-2"
+          >
+            <Card className="glass-card border-white/10">
+              <CardHeader className="pb-3 px-6 pt-5">
+                <div className="flex justify-between items-center w-full">
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-5 h-5 text-primary" />
+                    <h3 className="text-xl font-bold gradient-text-primary">Buzzword Stocks</h3>
+                  </div>
+                  <Tabs size="sm" aria-label="Movers tabs" color="primary" variant="bordered">
+                    <Tab key="all" title="All" />
+                    <Tab key="gainers" title="Gainers" />
+                    <Tab key="losers" title="Losers" />
+                  </Tabs>
+                </div>
+              </CardHeader>
+              <CardBody className="px-6">
+                <div className="space-y-3">
+                  {stocks
+                    .sort((a, b) => b.changePercent - a.changePercent)
+                    .map((stock, index) => (
+                      <motion.div
+                        key={stock.symbol}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        whileHover={{ scale: 1.02, x: 4 }}
+                        className="flex items-center justify-between p-4 rounded-xl glass cursor-pointer border border-white/5 hover:border-white/20 transition-all"
+                      >
+                        <div className="flex items-center gap-4 flex-1">
+                          <motion.div 
+                            whileHover={{ rotate: 360 }}
+                            transition={{ duration: 0.5 }}
+                            className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                              stock.change >= 0 
+                                ? 'bg-gradient-success shadow-lg shadow-success/20' 
+                                : 'bg-gradient-danger shadow-lg shadow-danger/20'
+                            }`}
+                          >
+                            {stock.change >= 0 ? (
+                              <TrendingUp className="w-6 h-6 text-white" />
+                            ) : (
+                              <TrendingDown className="w-6 h-6 text-white" />
+                            )}
+                          </motion.div>
+                          <div>
+                            <p className="font-bold text-base">{stock.symbol}</p>
+                            <p className="text-xs text-default-400">{stock.category}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-semibold text-sm">{stock.symbol}</p>
-                          <p className="text-xs text-default-500">{stock.category}</p>
+                        <div className="text-right">
+                          <p className="font-bold text-lg mb-1">${stock.price.toFixed(2)}</p>
+                          <Chip
+                            size="sm"
+                            color={stock.change >= 0 ? "success" : "danger"}
+                            variant="flat"
+                            className="font-semibold"
+                          >
+                            {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                          </Chip>
                         </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-semibold">${stock.price.toFixed(2)}</p>
-                        <Chip
-                          size="sm"
-                          color={stock.change >= 0 ? "success" : "danger"}
-                          variant="flat"
-                        >
-                          {stock.changePercent >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
-                        </Chip>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </CardBody>
-            <CardFooter>
-              <Button color="primary" variant="light" className="w-full">
-                View All Stocks
-              </Button>
-            </CardFooter>
-          </Card>
+                      </motion.div>
+                    ))}
+                </div>
+              </CardBody>
+              <CardFooter className="px-6 pt-3">
+                <motion.div className="w-full" whileHover={{ scale: 1.02 }}>
+                  <Button 
+                    color="primary" 
+                    variant="flat" 
+                    className="w-full font-semibold"
+                    endContent={<ArrowUpRight className="w-4 h-4" />}
+                  >
+                    View All Stocks
+                  </Button>
+                </motion.div>
+              </CardFooter>
+            </Card>
+          </motion.div>
 
           {/* Market News */}
-          <Card>
-            <CardHeader className="pb-3">
-              <h3 className="text-lg font-semibold">Market News</h3>
-            </CardHeader>
-            <CardBody className="px-4">
-              <div className="space-y-4">
-                {news.map((item) => (
-                  <div
-                    key={item.id}
-                    className="pb-4 border-b border-default-200 last:border-0 hover:opacity-80 transition-opacity cursor-pointer"
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <Card className="glass-card border-white/10">
+              <CardHeader className="pb-3 px-6 pt-5">
+                <h3 className="text-xl font-bold gradient-text">Market News</h3>
+              </CardHeader>
+              <CardBody className="px-6">
+                <div className="space-y-4">
+                  {news.map((item, index) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 + index * 0.1 }}
+                      whileHover={{ x: 4 }}
+                      className="pb-4 border-b border-white/10 last:border-0 cursor-pointer transition-all group"
+                    >
+                      <p className="text-sm text-foreground mb-2 line-clamp-2 leading-relaxed group-hover:text-primary transition-colors">
+                        {item.text}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-default-400">{item.time}</span>
+                        {item.impact === 'positive' && (
+                          <Chip size="sm" color="success" variant="flat" className="font-semibold">
+                            Bullish
+                          </Chip>
+                        )}
+                        {item.impact === 'negative' && (
+                          <Chip size="sm" color="danger" variant="flat" className="font-semibold">
+                            Bearish
+                          </Chip>
+                        )}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </CardBody>
+              <CardFooter className="px-6 pt-3">
+                <motion.div className="w-full" whileHover={{ scale: 1.02 }}>
+                  <Button 
+                    color="primary" 
+                    variant="flat" 
+                    className="w-full font-semibold"
+                    endContent={<ArrowUpRight className="w-4 h-4" />}
                   >
-                    <p className="text-sm text-foreground mb-2 line-clamp-2 leading-relaxed">
-                      {item.text}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-default-500">{item.time}</span>
-                      {item.impact === 'positive' && (
-                        <Chip size="sm" color="success" variant="flat">Bullish</Chip>
-                      )}
-                      {item.impact === 'negative' && (
-                        <Chip size="sm" color="danger" variant="flat">Bearish</Chip>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardBody>
-            <CardFooter>
-              <Button color="primary" variant="light" className="w-full">
-                View All News
-              </Button>
-            </CardFooter>
-          </Card>
+                    View All News
+                  </Button>
+                </motion.div>
+              </CardFooter>
+            </Card>
+          </motion.div>
         </div>
 
         {/* Category Performance */}
-        <Card>
-          <CardHeader className="pb-3">
-            <h3 className="text-lg font-semibold">Category Performance</h3>
-          </CardHeader>
-          <CardBody className="px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { name: 'Technology', change: 1.45, color: 'success' },
-                { name: 'Politics', change: 0.82, color: 'success' },
-                { name: 'Business', change: -0.34, color: 'danger' },
-                { name: 'Geopolitics', change: -1.12, color: 'danger' },
-              ].map((category) => (
-                <div
-                  key={category.name}
-                  className="p-4 rounded-lg bg-default-100 hover:bg-default-200 transition-colors cursor-pointer"
-                >
-                  <p className="text-sm font-medium mb-2">{category.name}</p>
-                  <div className="flex items-center gap-2">
-                    {category.change >= 0 ? (
-                      <ArrowUpRight className="w-4 h-4 text-success" />
-                    ) : (
-                      <ArrowDownRight className="w-4 h-4 text-danger" />
-                    )}
-                    <span className={`text-sm font-semibold ${
-                      category.change >= 0 ? 'text-success' : 'text-danger'
-                    }`}>
-                      {category.change >= 0 ? '+' : ''}{category.change.toFixed(2)}%
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardBody>
-        </Card>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <Card className="glass-card border-white/10">
+            <CardHeader className="pb-3 px-6 pt-5">
+              <h3 className="text-xl font-bold gradient-text">Category Performance</h3>
+            </CardHeader>
+            <CardBody className="px-6 pb-6">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { name: 'Technology', change: 1.45, color: 'success' },
+                  { name: 'Politics', change: 0.82, color: 'success' },
+                  { name: 'Business', change: -0.34, color: 'danger' },
+                  { name: 'Geopolitics', change: -1.12, color: 'danger' },
+                ].map((category, index) => (
+                  <motion.div
+                    key={category.name}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.7 + index * 0.1 }}
+                    whileHover={{ scale: 1.05, y: -4 }}
+                    className="p-5 rounded-xl glass cursor-pointer border border-white/5 hover:border-white/20 transition-all"
+                  >
+                    <p className="text-sm font-bold mb-3 text-foreground">{category.name}</p>
+                    <div className="flex items-center gap-2">
+                      <motion.div
+                        animate={{ 
+                          y: category.change >= 0 ? [0, -3, 0] : [0, 3, 0]
+                        }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      >
+                        {category.change >= 0 ? (
+                          <ArrowUpRight className="w-5 h-5 text-success" />
+                        ) : (
+                          <ArrowDownRight className="w-5 h-5 text-danger" />
+                        )}
+                      </motion.div>
+                      <span className={`text-base font-bold ${
+                        category.change >= 0 ? 'text-success' : 'text-danger'
+                      }`}>
+                        {category.change >= 0 ? '+' : ''}{category.change.toFixed(2)}%
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </CardBody>
+          </Card>
+        </motion.div>
 
       </div>
     </div>

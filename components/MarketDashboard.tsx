@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import useSWR from 'swr';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Navbar, 
   NavbarBrand, 
@@ -29,7 +30,8 @@ import {
   Bell,
   Settings,
   LogOut,
-  User as UserIcon
+  User as UserIcon,
+  Sparkles
 } from 'lucide-react';
 import DashboardView from './views/DashboardView';
 import TradingView from './views/TradingView';
@@ -84,51 +86,136 @@ export default function MarketDashboard() {
   const renderView = () => {
     if (isLoading) {
       return (
-        <div className="flex items-center justify-center h-full">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex items-center justify-center h-full"
+        >
           <div className="text-center">
-            <div className="text-6xl mb-4">📈</div>
-            <h3 className="text-2xl text-default-500 mb-2">Loading Market Data...</h3>
+            <motion.div
+              animate={{ 
+                scale: [1, 1.2, 1],
+                rotate: [0, 360]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="text-6xl mb-4"
+            >
+              📈
+            </motion.div>
+            <motion.h3 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="text-2xl gradient-text font-bold mb-2"
+            >
+              Loading Market Data...
+            </motion.h3>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="flex gap-1 justify-center mt-4"
+            >
+              {[0, 1, 2].map((i) => (
+                <motion.div
+                  key={i}
+                  className="w-2 h-2 bg-primary rounded-full"
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{
+                    duration: 0.6,
+                    repeat: Infinity,
+                    delay: i * 0.15
+                  }}
+                />
+              ))}
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       );
     }
 
     if (error) {
       return (
-        <div className="flex items-center justify-center h-full">
-          <div className="text-center">
-            <div className="text-6xl mb-4">⚠️</div>
-            <h3 className="text-2xl text-danger mb-2">Error Loading Data</h3>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="flex items-center justify-center h-full"
+        >
+          <div className="text-center glass-card p-8 rounded-2xl max-w-md">
+            <motion.div
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+              className="text-6xl mb-4"
+            >
+              ⚠️
+            </motion.div>
+            <h3 className="text-2xl font-bold text-danger mb-2">Error Loading Data</h3>
             <p className="text-default-400">{error.message}</p>
+            <Button 
+              color="primary" 
+              className="mt-4"
+              startContent={<Sparkles className="w-4 h-4" />}
+            >
+              Retry
+            </Button>
           </div>
-        </div>
+        </motion.div>
       );
     }
 
-    switch (activeView) {
-      case 'dashboard':
-        return <DashboardView stocks={stocks} />;
-      case 'trading':
-        return <TradingView stocks={stocks} />;
-      case 'portfolio':
-        return <PortfolioView stocks={stocks} />;
-      case 'markets':
-      case 'leaderboard':
-      case 'global':
-        return (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center">
-              <div className="text-6xl mb-4">🚧</div>
-              <h3 className="text-2xl text-default-500 mb-2">
-                {activeView.charAt(0).toUpperCase() + activeView.slice(1)}
-              </h3>
-              <p className="text-default-400">Coming soon...</p>
-            </div>
-          </div>
-        );
-      default:
-        return <DashboardView stocks={stocks} />;
-    }
+    return (
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeView}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.3 }}
+          className="h-full"
+        >
+          {(() => {
+            switch (activeView) {
+              case 'dashboard':
+                return <DashboardView stocks={stocks} />;
+              case 'trading':
+                return <TradingView stocks={stocks} />;
+              case 'portfolio':
+                return <PortfolioView stocks={stocks} />;
+              case 'markets':
+              case 'leaderboard':
+              case 'global':
+                return (
+                  <div className="flex items-center justify-center h-full">
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-center glass-card p-12 rounded-2xl"
+                    >
+                      <motion.div
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="text-6xl mb-4"
+                      >
+                        🚧
+                      </motion.div>
+                      <h3 className="text-2xl font-bold gradient-text mb-2">
+                        {activeView.charAt(0).toUpperCase() + activeView.slice(1)}
+                      </h3>
+                      <p className="text-default-400">Coming soon...</p>
+                    </motion.div>
+                  </div>
+                );
+              default:
+                return <DashboardView stocks={stocks} />;
+            }
+          })()}
+        </motion.div>
+      </AnimatePresence>
+    );
   };
 
   // Calculate mock portfolio metrics
@@ -137,7 +224,7 @@ export default function MarketDashboard() {
   const portfolioChange = 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-dark grid-pattern">
       {/* Top Navigation Bar */}
       <Navbar 
         isBordered 
@@ -145,35 +232,52 @@ export default function MarketDashboard() {
         onMenuOpenChange={setIsMenuOpen}
         maxWidth="full"
         classNames={{
-          wrapper: "px-6 backdrop-blur-md bg-background/80"
+          wrapper: "px-6 glass"
         }}
-        className="border-b border-default-200"
+        className="border-b border-white/10"
       >
         {/* Logo */}
         <NavbarContent justify="start">
-          <NavbarBrand className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-white" />
-            </div>
-            <p className="font-bold text-xl text-primary">BUZZDAQ</p>
+          <NavbarBrand className="flex items-center gap-3">
+            <motion.div 
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center glow-primary"
+            >
+              <TrendingUp className="w-6 h-6 text-white" />
+            </motion.div>
+            <motion.p 
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="font-bold text-2xl gradient-text-primary"
+            >
+              BUZZDAQ
+            </motion.p>
           </NavbarBrand>
         </NavbarContent>
 
         {/* Main Navigation - Desktop */}
-        <NavbarContent className="hidden lg:flex gap-6" justify="center">
-          {menuItems.map((item) => {
+        <NavbarContent className="hidden lg:flex gap-2" justify="center">
+          {menuItems.map((item, index) => {
             const Icon = item.icon;
+            const isActive = activeView === item.id;
             return (
-              <NavbarItem key={item.id} isActive={activeView === item.id}>
-                <Button
-                  variant={activeView === item.id ? "flat" : "light"}
-                  color={activeView === item.id ? "primary" : "default"}
-                  startContent={<Icon className="w-4 h-4" />}
-                  onPress={() => setActiveView(item.id)}
-                  className={activeView === item.id ? "" : "text-default-500"}
+              <NavbarItem key={item.id}>
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
                 >
-                  {item.label}
-                </Button>
+                  <Button
+                    variant={isActive ? "flat" : "light"}
+                    color={isActive ? "primary" : "default"}
+                    startContent={<Icon className="w-4 h-4" />}
+                    onPress={() => setActiveView(item.id)}
+                    className={`${isActive ? "glow-primary" : "text-default-500 hover:text-foreground"} transition-all`}
+                  >
+                    {item.label}
+                  </Button>
+                </motion.div>
               </NavbarItem>
             );
           })}
@@ -183,45 +287,55 @@ export default function MarketDashboard() {
         <NavbarContent justify="end">
           {/* Portfolio Value Chip */}
           <NavbarItem className="hidden md:flex">
-            <div className="flex items-center gap-3 px-3 py-1 bg-default-100 rounded-lg">
+            <motion.div 
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-3 px-4 py-2 glass-card rounded-xl"
+            >
               <div className="text-right">
-                <p className="text-xs text-default-500">Portfolio</p>
+                <p className="text-xs text-default-400">Portfolio</p>
                 <p className="text-sm font-bold">${portfolioValue.toFixed(2)}</p>
               </div>
               <Chip
                 color={portfolioChange >= 0 ? "success" : "danger"}
                 variant="flat"
                 size="sm"
+                className="font-semibold"
               >
                 {portfolioChange >= 0 ? '+' : ''}{portfolioChange.toFixed(2)}%
               </Chip>
-            </div>
+            </motion.div>
           </NavbarItem>
 
           {/* Notifications */}
           <NavbarItem>
-            <Button isIconOnly variant="light" aria-label="Notifications">
-              <Badge content="3" color="danger" size="sm">
-                <Bell className="w-5 h-5" />
-              </Badge>
-            </Button>
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <Button isIconOnly variant="light" aria-label="Notifications" className="relative">
+                <Badge content="3" color="danger" size="sm" className="animate-pulse">
+                  <Bell className="w-5 h-5" />
+                </Badge>
+              </Button>
+            </motion.div>
           </NavbarItem>
 
           {/* User Menu */}
           <NavbarItem>
             <Dropdown placement="bottom-end">
               <DropdownTrigger>
-                <Avatar
-                  isBordered
-                  as="button"
-                  className="transition-transform"
-                  color="primary"
-                  name="User"
-                  size="sm"
-                  src=""
-                />
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                  <Avatar
+                    isBordered
+                    as="button"
+                    className="transition-transform"
+                    color="primary"
+                    name="User"
+                    size="sm"
+                    src=""
+                  />
+                </motion.div>
               </DropdownTrigger>
-              <DropdownMenu aria-label="User Actions" variant="flat">
+              <DropdownMenu aria-label="User Actions" variant="flat" className="glass-card">
                 <DropdownItem key="profile" startContent={<UserIcon className="w-4 h-4" />}>
                   Profile
                 </DropdownItem>
@@ -243,24 +357,31 @@ export default function MarketDashboard() {
         </NavbarContent>
 
         {/* Mobile Menu */}
-        <NavbarMenu>
-          {menuItems.map((item) => {
+        <NavbarMenu className="glass pt-6">
+          {menuItems.map((item, index) => {
             const Icon = item.icon;
+            const isActive = activeView === item.id;
             return (
               <NavbarMenuItem key={item.id}>
-                <Button
-                  fullWidth
-                  variant={activeView === item.id ? "flat" : "light"}
-                  color={activeView === item.id ? "primary" : "default"}
-                  startContent={<Icon className="w-4 h-4" />}
-                  onPress={() => {
-                    setActiveView(item.id);
-                    setIsMenuOpen(false);
-                  }}
-                  className="justify-start"
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
                 >
-                  {item.label}
-                </Button>
+                  <Button
+                    fullWidth
+                    variant={isActive ? "flat" : "light"}
+                    color={isActive ? "primary" : "default"}
+                    startContent={<Icon className="w-4 h-4" />}
+                    onPress={() => {
+                      setActiveView(item.id);
+                      setIsMenuOpen(false);
+                    }}
+                    className="justify-start"
+                  >
+                    {item.label}
+                  </Button>
+                </motion.div>
               </NavbarMenuItem>
             );
           })}
