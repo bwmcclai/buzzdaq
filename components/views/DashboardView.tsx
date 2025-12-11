@@ -26,8 +26,8 @@ export default function DashboardView({ stocks }: DashboardViewProps) {
   ];
 
   return (
-    <div className="h-full overflow-y-auto bg-default-50">
-      <div className="max-w-[1600px] mx-auto p-6 space-y-6">
+    <div className="h-full overflow-y-auto bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-blue-950/20 dark:to-purple-950/10 custom-scrollbar">
+      <div className="max-w-[1600px] mx-auto p-6 space-y-6 animate-fade-in">
         
         {/* Market Overview Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

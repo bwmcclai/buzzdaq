@@ -137,7 +137,7 @@ export default function MarketDashboard() {
   const portfolioChange = 0;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       {/* Top Navigation Bar */}
       <Navbar 
         isBordered 
@@ -145,8 +145,9 @@ export default function MarketDashboard() {
         onMenuOpenChange={setIsMenuOpen}
         maxWidth="full"
         classNames={{
-          wrapper: "px-6"
+          wrapper: "px-6 backdrop-blur-md bg-background/80"
         }}
+        className="border-b border-default-200"
       >
         {/* Logo */}
         <NavbarContent justify="start">
